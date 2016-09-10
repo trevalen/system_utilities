@@ -3,7 +3,7 @@
 
 class DottedDict(dict):
     '''
-    Override for the dict object to allow referencing of keys as
+    Override for the dict object to allow referencing of keys as 
     attributes, i.e. dict.key
     '''
     def __init__(self, *args, **kwargs):
@@ -11,10 +11,14 @@ class DottedDict(dict):
         for arg in args:
             if isinstance(arg, dict):
                 for key, value in arg.iteritems():
+                    if isinstance(value, dict):
+                        value = DottedDict(**value)
                     self[key] = value
 
         if kwargs:
             for key, value in kwargs.iteritems():
+                if isinstance(value, dict):
+                    value = DottedDict(**value)
                 self[key] = value
 
     def __getattr__(self, attr):
