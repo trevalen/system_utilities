@@ -1,10 +1,12 @@
 #! /usr/bin/env python
 
 
+import re
+
+
 class DottedDict(dict):
     '''
-    Override for the dict object to allow referencing of keys as 
-    attributes, i.e. dict.key
+    Override for the dict object to allow referencing of keys as attributes, i.e. dict.key
     '''
     def __init__(self, *args, **kwargs):
         super(DottedDict, self).__init__(*args, **kwargs)
@@ -29,11 +31,13 @@ class DottedDict(dict):
             raise AttributeError(attr)
 
     def __setattr__(self, key, value):
-        self.__setitem__(key, value)
+        if self._is_valid_identifier_(key):
+            self.__setitem__(key, value)
 
     def __setitem__(self, key, value):
-        super(DottedDict, self).__setitem__(key, value)
-        self.__dict__.update({key: value})
+        if self._is_valid_identifier_(key):
+            super(DottedDict, self).__setitem__(key, value)
+            self.__dict__.update({key: value})
 
     def __delattr__(self, item):
         self.__delitem__(item)
@@ -41,6 +45,50 @@ class DottedDict(dict):
     def __delitem__(self, key):
         super(DottedDict, self).__delitem__(key)
         del self.__dict__[key]
+
+    def _is_valid_identifier_(self, identifier):
+        '''
+        Test the key name for valid identifier status as considered by the python lexer.
+        https://stackoverflow.com/questions/10120295/valid-characters-in-a-python-class-name
+        '''
+        python_keywords = [
+            'False',
+            'class',
+            'finally',
+            'is',
+            'return',
+            'None',
+            'continue',
+            'for',
+            'lambda',
+            'try',
+            'True',
+            'def',
+            'from',
+            'nonlocal',
+            'while',
+            'and',
+            'del',
+            'global',
+            'not',
+            'with',
+            'as',
+            'elif',
+            'if',
+            'or',
+            'yield',
+            'assert',
+            'else',
+            'import',
+            'pass',
+            'break',
+            'except',
+            'in',
+            'raise'
+        ]
+        if identifier not in python_keywords and re.match('[a-zA-Z_][a-zA-Z0-9_]*', identifier):
+            return True
+        raise SyntaxError('Key name is not a valid identifier or is reserved keyword.')
 
 
 class DynamicObject(object):
