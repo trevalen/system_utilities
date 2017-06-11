@@ -52,39 +52,10 @@ class DottedDict(dict):
         https://stackoverflow.com/questions/10120295/valid-characters-in-a-python-class-name
         '''
         python_keywords = [
-            'False',
-            'class',
-            'finally',
-            'is',
-            'return',
-            'None',
-            'continue',
-            'for',
-            'lambda',
-            'try',
-            'True',
-            'def',
-            'from',
-            'nonlocal',
-            'while',
-            'and',
-            'del',
-            'global',
-            'not',
-            'with',
-            'as',
-            'elif',
-            'if',
-            'or',
-            'yield',
-            'assert',
-            'else',
-            'import',
-            'pass',
-            'break',
-            'except',
-            'in',
-            'raise'
+            'False', 'None', 'True', 'and', 'as', 'assert', 'break', 'class', 'continue', 'def',
+            'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import',
+            'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try',
+            'while', 'with', 'yield'
         ]
         if identifier not in python_keywords and re.match('[a-zA-Z_][a-zA-Z0-9_]*', identifier):
             return True
@@ -130,4 +101,3 @@ class DynamicObject(object):
             result = self._properties[name]()
             self.__dict__[name] = result
         return getattr(self, name)
-
