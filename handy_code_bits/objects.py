@@ -24,6 +24,9 @@ class DottedDict(dict):
                 self[key] = value
 
     def __getattr__(self, attr):
+        value = self.get(attr, None)
+        if value is not None:
+            return value
         try:
             return self.__dict__[attr]
         # Do this to match python default behavior
