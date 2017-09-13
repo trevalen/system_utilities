@@ -12,13 +12,13 @@ class DottedDict(dict):
         super(DottedDict, self).__init__(*args, **kwargs)
         for arg in args:
             if isinstance(arg, dict):
-                for key, value in arg.iteritems():
+                for key, value in arg.items():
                     if isinstance(value, dict):
                         value = DottedDict(**value)
                     self[key] = value
 
         if kwargs:
-            for key, value in kwargs.iteritems():
+            for key, value in kwargs.items():
                 if isinstance(value, dict):
                     value = DottedDict(**value)
                 self[key] = value
